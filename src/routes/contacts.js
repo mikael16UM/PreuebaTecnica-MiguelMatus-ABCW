@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { requireAuth } from '../middleware/auth.js';
-import { saveContactMessage } from '../repositories/contacts.js';
+import { listMessages, saveContactMessage } from '../repositories/contacts.js';
 import { validateContact } from '../validation/contact.js';
 
 const router = Router();
@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', requireAuth, (req, res) => {
-  res.status(501).json({ error: 'No implementado. Construye el listado de contactos.' });
+  res.json(listMessages());
 });
 
 export default router;
