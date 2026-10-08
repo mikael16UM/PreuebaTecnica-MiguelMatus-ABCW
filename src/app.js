@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 import db from './db.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { requireAuth } from './middleware/auth.js';
 import contactsRouter from './routes/contacts.js';
+import sessionRouter from './routes/session.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -15,7 +15,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/admin', requireAuth, (req, res) => {
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
 
@@ -24,6 +28,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/contacts', contactsRouter);
+app.use('/api/session', sessionRouter);
 
 app.use(errorHandler);
 

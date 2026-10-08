@@ -8,20 +8,34 @@ const TEST_PASSWORD = 'test-password';
 process.env.DATABASE_PATH = ':memory:';
 process.env.ADMIN_USER = TEST_USER;
 process.env.ADMIN_PASSWORD = TEST_PASSWORD;
+process.env.JWT_SECRET = 'clave-solo-para-tests';
 
 const { default: app } = await import('../src/app.js');
 const { seedFirstUser } = await import('../src/seedFirstUser.js');
 
-const AUTH_HEADER = `Basic ${Buffer.from(`${TEST_USER}:${TEST_PASSWORD}`).toString('base64')}`;
-
 let server;
 let contactsUrl;
+let sessionUrl;
+let authToken;
+
+function logIn(username, password) {
+  return fetch(sessionUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
+}
 
 before(async () => {
   seedFirstUser();
   server = app.listen(0);
   await once(server, 'listening');
-  contactsUrl = `http://localhost:${server.address().port}/api/contacts`;
+  const baseUrl = `http://localhost:${server.address().port}`;
+  contactsUrl = `${baseUrl}/api/contacts`;
+  sessionUrl = `${baseUrl}/api/session`;
+
+  const loginResponse = await logIn(TEST_USER, TEST_PASSWORD);
+  authToken = (await loginResponse.json()).token;
 });
 
 after(() => {
@@ -38,7 +52,7 @@ function postContact(body) {
 }
 
 async function listMessages() {
-  const response = await fetch(contactsUrl, { headers: { Authorization: AUTH_HEADER } });
+  const response = await fetch(contactsUrl, { headers: { Authorization: `Bearer ${authToken}` } });
   return response.json();
 }
 
@@ -89,8 +103,26 @@ test('agrupa en un solo contacto los envíos del mismo correo', async () => {
   assert.deepEqual(fromEva.map((message) => message.name), ['Eva Ruiz', 'Eva R.']);
 });
 
-test('niega el listado sin credenciales', async () => {
+test('niega el listado sin token', async () => {
   const response = await fetch(contactsUrl);
+
+  assert.equal(response.status, 401);
+});
+
+test('rechaza el inicio de sesión con contraseña incorrecta', async () => {
+  const response = await logIn(TEST_USER, 'contraseña-incorrecta');
+  const body = await response.json();
+
+  assert.equal(response.status, 401);
+  assert.equal(body.token, undefined);
+});
+
+test('rechaza un token con el contenido alterado', async () => {
+  const [header, , signature] = authToken.split('.');
+  const forgedPayload = Buffer.from(JSON.stringify({ sub: '999' })).toString('base64url');
+  const forgedToken = [header, forgedPayload, signature].join('.');
+
+  const response = await fetch(contactsUrl, { headers: { Authorization: `Bearer ${forgedToken}` } });
 
   assert.equal(response.status, 401);
 });
