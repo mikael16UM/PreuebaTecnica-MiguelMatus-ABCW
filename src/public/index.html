@@ -4,19 +4,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Contacto</title>
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    <!--
-      TODO (candidato): construye aquí el formulario público de contacto
-      (nombre, correo, mensaje), con validación en el cliente, y envíalo
-      a  POST /api/contacts.
+    <main class="page">
+      <header class="page-header">
+        <h1>Contáctanos</h1>
+        <p>Cuéntanos qué necesitas y te responderemos por correo.</p>
+      </header>
 
-      Esta carpeta (src/public) es SOLO la opción "vanilla".
-      Si prefieres Astro, Next o Svelte, arma tu front como quieras:
-      lo único imprescindible es que consuma tu propia API.
-    -->
-    <main>
-      <h1>TODO: formulario de contacto</h1>
+      <form id="contact-form" class="card" novalidate>
+        <div class="field">
+          <label for="name">Nombre</label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="100" aria-describedby="name-error" />
+          <p id="name-error" class="field-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="email">Correo</label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="email-error" />
+          <p id="email-error" class="field-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="message" rows="6" maxlength="1500" aria-describedby="message-error message-counter"></textarea>
+          <div class="field-footer">
+            <p id="message-error" class="field-error" role="alert"></p>
+            <p id="message-counter" class="counter">0 / 1500</p>
+          </div>
+        </div>
+
+        <button id="submit-button" type="submit">Enviar mensaje</button>
+        <p id="form-status" class="form-status" role="status"></p>
+      </form>
     </main>
   </body>
 </html>
