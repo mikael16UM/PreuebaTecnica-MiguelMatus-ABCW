@@ -7,6 +7,7 @@ const dbPath = process.env.DATABASE_PATH || './db/app.sqlite';
 
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS contacts (
@@ -21,7 +22,8 @@ db.exec(`
     contact_id INTEGER NOT NULL,
     name       TEXT NOT NULL,
     message    TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+    FOREIGN KEY (contact_id) REFERENCES contacts (contact_id)
   );
 
   CREATE TABLE IF NOT EXISTS users (

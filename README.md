@@ -127,7 +127,7 @@ minúsculas.
   módulo sin efectos y el SQL vive en repositorios con sentencias preparadas. Un manejador
   central convierte cualquier fallo en un `500` genérico y deja el detalle en el log. Hash de
   contraseñas y tests usan módulos que ya trae Node (`crypto`, `node:test`).
-- **Usuarios en la base, no en el `.env`.** La contraseña se guarda con `scrypt` y sal; el `.env`
+- **Usuarios en la base, no en el `.env`.** La contraseña se guarda con `scrypt` y salt; el `.env`
   solo siembra el primer usuario. La autenticación es Basic Auth, que evita programar login y
   sesiones, a cambio de exigir HTTPS en producción.
 - **La página del panel no está en la carpeta pública.** Al probarla ahí, una URL codificada
@@ -158,9 +158,9 @@ archivo, e hice un commit por paso.
 - **Paginación y búsqueda.** El listado trae todo. Usaría `LIMIT` con cursor por `created_at`
   (el índice ya existe) y un filtro por correo.
 - **Protección contra abuso.** No hay límite de intentos ni en el formulario ni en el login.
-  Agregaría un limitador por IP y un campo trampa contra bots.
+  Agregaría un rate limit.
 - **Sesiones en lugar de Basic Auth.** Basic Auth verifica la contraseña en cada petición y no
   permite cerrar sesión. Para producción: login con cookie de sesión, HTTPS y alta de usuarios.
 - **Migraciones.** El esquema se crea con `CREATE TABLE IF NOT EXISTS`, que no modifica tablas
   existentes. Con más cambios usaría migraciones versionadas.
-- **Más tests.** Faltan el caso de fallo al guardar (`500`) y pruebas del front.
+- **Más tests.** Faltan el caso de fallo al guardar y pruebas del front.
