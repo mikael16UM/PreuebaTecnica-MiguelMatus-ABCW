@@ -1,7 +1,7 @@
     import jwt from 'jsonwebtoken';
 
 const TOKEN_ALGORITHM = 'HS256';
-const TOKEN_DURATION = '8h';
+const TOKEN_DURATION = '1h';
 
 function getSecret() {
   const secret = process.env.JWT_SECRET;
