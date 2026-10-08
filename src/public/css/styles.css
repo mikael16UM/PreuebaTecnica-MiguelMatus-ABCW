@@ -143,3 +143,50 @@ button:disabled {
 .form-status--error {
   color: var(--color-error);
 }
+
+
+.page--wide {
+  max-width: 1040px;
+}
+
+.table-wrapper {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.messages-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.messages-table th,
+.messages-table td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.messages-table th {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  background: var(--color-background);
+}
+
+.messages-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.messages-table .cell-date {
+  white-space: nowrap;
+}
+
+.messages-table .cell-message {
+  min-width: 280px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.messages-table .cell-count {
+  text-align: right;
+}

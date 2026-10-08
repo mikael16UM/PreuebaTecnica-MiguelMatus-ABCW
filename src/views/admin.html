@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Administración · Mensajes</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <main class="page page--wide">
+      <header class="page-header">
+        <h1>Mensajes recibidos</h1>
+        <p id="list-status" role="status">Cargando…</p>
+      </header>
+
+      <div class="card table-wrapper">
+        <table class="messages-table">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Mensaje</th>
+              <th scope="col" class="cell-count">Envíos</th>
+            </tr>
+          </thead>
+          <tbody id="messages-body"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script type="module" src="/js/admin.js"></script>
+  </body>
+</html>
